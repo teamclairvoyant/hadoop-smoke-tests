@@ -7,7 +7,7 @@ cluster or after a cluster upgrade to prove that the services work.
 
 ## Documents
 
-- [Smoke Tests for a Cloudera CDH Cluster](CLOUDERA.md)
+- [Smoke Tests for a Cloudera CDH Cluster](Cloudera-CDH.md)
 
 ## Guidelines:
 
