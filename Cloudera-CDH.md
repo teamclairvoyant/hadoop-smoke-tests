@@ -264,7 +264,7 @@ For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 ```
 # Replace $HIVESERVER2 with the correct hostname that is running the HS2
 HIVESERVER2=`hostname`
-REALM=`awk '/^default_realm/{print $3}' /etc/krb5.conf`
+REALM=`awk '/^ *default_realm/{print $3}' /etc/krb5.conf`
 BKOPTS=";principal=hive/_HOST@${REALM}"
 BTOPTS=";ssl=true;sslTrustStore=/usr/java/default/jre/lib/security/jssecacerts;trustStorePassword=changeit"
 
@@ -494,7 +494,7 @@ For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 ```
 # Replace $HIVESERVER2 with the correct hostname that is running the HS2
 HIVESERVER2=`hostname`
-REALM=`awk '/^default_realm/{print $3}' /etc/krb5.conf`
+REALM=`awk '/^ *default_realm/{print $3}' /etc/krb5.conf`
 BKOPTS=";principal=hive/_HOST@${REALM}"
 BTOPTS=";ssl=true;sslTrustStore=/usr/java/default/jre/lib/security/jssecacerts;trustStorePassword=changeit"
 
