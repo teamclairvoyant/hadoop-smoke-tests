@@ -10,7 +10,7 @@ These examples assume a non-secured cluster and use of a non-cluster user (i.e. 
 ### Kafka
 Create a test topic.  Write to/read from it.
 
-```
+```bash
 # Replace $ZOOKEEPER and $KAFKA 'localhost' with the correct hostname.
 # Replace the ZOOKEEPER '/kafka' with the correct ZooKeeper root (if you configured one).
 ZOOKEEPER=localhost:2181/kafka
@@ -29,7 +29,7 @@ kafka-console-producer --broker-list ${KAFKA} --topic test
 ### Clean It Up
 Get rid of all the test bits.
 
-```
+```bash
 kafka-topics --zookeeper ${ZOOKEEPER}:2181 --delete --topic test
 ```
 
@@ -39,14 +39,14 @@ These examples assume a secured (Kerberized) cluster with TLS and use of a non-c
 ### Preparation
 All below commands require Kerberos tickets.
 
-```
+```bash
 kinit
 ```
 
 ### Kafka
 Create a test topic.  Write to/read from it.
 
-```
+```bash
 # Replace $ZOOKEEPER and $KAFKA 'localhost' with the correct hostname.
 # Replace the ZOOKEEPER '/kafka' with the correct ZooKeeper root (if you configured one).
 ZOOKEEPER=localhost:2181/kafka
@@ -65,7 +65,7 @@ kafka-console-producer --broker-list ${KAFKA} --topic test
 ### Clean It Up
 Get rid of all the test bits.
 
-```
+```bash
 kafka-topics --zookeeper ${ZOOKEEPER} --delete --topic test
 
 

@@ -10,12 +10,12 @@ These examples assume a non-secured cluster and use of a non-cluster user (i.e. 
 ### Spark2
 Pi Estimator
 
-```
+```bash
 MASTER=yarn /opt/cloudera/parcels/SPARK2/lib/spark2/bin/run-example SparkPi 100
 ```
 Wordcount
 
-```
+```bash
 echo "this is the end. the only end. my friend." > /tmp/sparkin2.$$
 hdfs dfs -put /tmp/sparkin2.$$ /tmp/
 
@@ -34,7 +34,7 @@ hdfs dfs -cat /tmp/sparkout2.$$/part-\*
 ### Clean It Up
 Get rid of all the test bits.
 
-```
+```bash
 hdfs dfs -rm -R /tmp/sparkout2.$$ /tmp/sparkin2.$$
 rm -f /tmp/spark2.$$
 ```
@@ -45,19 +45,19 @@ These examples assume a secured (Kerberized) cluster with TLS and use of a non-c
 ### Preparation
 All below commands require Kerberos tickets.
 
-```
+```bash
 kinit
 ```
 
 ### Spark2
 Pi Estimator
 
-```
+```bash
 MASTER=yarn /opt/cloudera/parcels/SPARK2/lib/spark2/bin/run-example SparkPi 100
 ```
 Wordcount
 
-```
+```bash
 echo "this is the end. the only end. my friend." > /tmp/sparkin2.$$
 hdfs dfs -put /tmp/sparkin2.$$ /tmp/
 
@@ -76,7 +76,7 @@ hdfs dfs -cat /tmp/sparkout2.$$/part-\*
 ### Clean It Up
 Get rid of all the test bits.
 
-```
+```bash
 hdfs dfs -rm -R /tmp/sparkout2.$$ /tmp/sparkin2.$$
 rm -f /tmp/spark2.$$
 

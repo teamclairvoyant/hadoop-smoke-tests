@@ -10,7 +10,7 @@ These examples assume a non-secured cluster and use of a non-cluster user (i.e. 
 ### HDFS
 Basic HDFS functionality.
 
-```
+```bash
 hdfs dfs -ls /
 hdfs dfs -put /etc/hosts /tmp/hosts
 hdfs dfs -get /tmp/hosts /tmp/hosts123
@@ -20,7 +20,7 @@ cat /tmp/hosts123
 ### MapReduce
 Pi Estimator
 
-```
+```bash
 yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/hadoop-examples.jar pi 10 1000
 ```
 
@@ -32,7 +32,7 @@ For Hive on MapReduce, add "set hive.execution.engine=mr;" to the query.
 For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 
 
-```
+```bash
 # Replace $HIVESERVER2 with the correct hostname that is running the HS2
 HIVESERVER2=
 
@@ -52,7 +52,7 @@ beeline -n `whoami` -u "jdbc:hive2://${HIVESERVER2}:10000/" -e "SELECT * FROM te
 ### HBase
 Create a table and query it.
 
-```
+```bash
 cat <<EOF >/tmp/hbase.$$
 create 'test', 'cf'
 list 'test'
@@ -67,7 +67,7 @@ hbase shell -n /tmp/hbase.$$
 ### Impala
 Query the hive table created earlier.
 
-```
+```bash
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
 IMPALAD=
 
@@ -78,13 +78,13 @@ impala-shell -i $IMPALAD -q "SELECT * FROM test;"
 ### Spark
 Pi Estimator
 
-```
+```bash
 MASTER=yarn /opt/cloudera/parcels/CDH/lib/spark/bin/run-example SparkPi 100
 ```
 
 Wordcount
 
-```
+```bash
 echo "this is the end. the only end. my friend." > /tmp/sparkin.$$
 hdfs dfs -put /tmp/sparkin.$$ /tmp/
 
@@ -103,7 +103,7 @@ hdfs dfs -cat /tmp/sparkout.$$/part-\*
 ### Pig
 Query data in a file.
 
-```
+```bash
 hdfs dfs -copyFromLocal /etc/passwd /tmp/test.pig.passwd.$$
 
 cat <<EOF >/tmp/pig.$$
@@ -120,7 +120,7 @@ hdfs dfs -cat /tmp/test.pig.out.$$/part-m-00000
 ### Solr
 Create a test collection.  Index it and query it.
 
-```
+```bash
 SOLRSERVER=
 
 solrctl instancedir --generate /tmp/solr.$$
@@ -135,7 +135,7 @@ curl "http://${SOLRSERVER}:8983/solr/test_collection_shard1_replica1/select?q=*%
 #### Impala
 Create a Kudu table and query it.
 
-```
+```bash
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
 IMPALAD=
 
@@ -149,7 +149,7 @@ impala-shell -i $IMPALAD -q 'SELECT * FROM kudu_test WHERE id=1;'
 ### Clean It Up
 Get rid of all the test bits.
 
-```
+```bash
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
@@ -184,14 +184,14 @@ These examples assume a secured (Kerberized) cluster with TLS and use of a non-c
 ### Preparation
 All below commands require Kerberos tickets.
 
-```
+```bash
 kinit
 ```
 
 ### HDFS
 Basic HDFS functionality.
 
-```
+```bash
 hdfs dfs -ls /
 hdfs dfs -put /etc/hosts /tmp/hosts
 hdfs dfs -get /tmp/hosts /tmp/hosts123
@@ -201,7 +201,7 @@ cat /tmp/hosts123
 ### MapReduce
 Pi Estimator
 
-```
+```bash
 yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/hadoop-examples.jar pi 10 1000
 ```
 
@@ -213,7 +213,7 @@ For Hive on MapReduce, add "set hive.execution.engine=mr;" to the query.
 For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 
 
-```
+```bash
 # Replace $HIVESERVER2 with the correct hostname that is running the HS2
 HIVESERVER2=
 REALM=`awk '/^ *default_realm/{print $3}' /etc/krb5.conf`
@@ -235,7 +235,7 @@ beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "SELECT * F
 ### HBase
 Create a table and query it.
 
-```
+```bash
 cat <<EOF >/tmp/hbase.$$
 create 'test', 'cf'
 list 'test'
@@ -250,7 +250,7 @@ hbase shell -n /tmp/hbase.$$
 ### Impala
 Query the hive table created earlier.
 
-```
+```bash
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
 IMPALAD=
 IKOPTS="-k"
@@ -263,12 +263,12 @@ impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "SELECT * FROM test;"
 ### Spark
 Pi Estimator
 
-```
+```bash
 MASTER=yarn /opt/cloudera/parcels/CDH/lib/spark/bin/run-example SparkPi 100
 ```
 Wordcount
 
-```
+```bash
 echo "this is the end. the only end. my friend." > /tmp/sparkin.$$
 hdfs dfs -put /tmp/sparkin.$$ /tmp/
 
@@ -287,7 +287,7 @@ hdfs dfs -cat /tmp/sparkout.$$/part-\*
 ### Pig
 Query data in a file.
 
-```
+```bash
 hdfs dfs -copyFromLocal /etc/passwd /tmp/test.pig.passwd.$$
 
 cat <<EOF >/tmp/pig.$$
@@ -304,7 +304,7 @@ hdfs dfs -cat /tmp/test.pig.out.$$/part-m-00000
 ### Solr
 Create a test collection.  Index it and query it.
 
-```
+```bash
 SOLRSERVER=
 SKOPTS="--negotiate -u :"
 STPROTO=https
@@ -322,7 +322,7 @@ curl $SKOPTS "${STPROTO:-http}://${SOLRSERVER}:${STPORT:-8983}/solr/test_collect
 ### Clean It Up
 Get rid of all the test bits.
 
-```
+```bash
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
@@ -367,14 +367,14 @@ Hive needs to have admin groups (AD or LDAP) added to the Hive Metastore Access 
 
 All below commands require Kerberos tickets.
 
-```
+```bash
 kinit
 ```
 
 ### HDFS
 Basic HDFS functionality.
 
-```
+```bash
 hdfs dfs -ls /
 hdfs dfs -put /etc/hosts /tmp/hosts
 hdfs dfs -get /tmp/hosts /tmp/hosts123
@@ -384,7 +384,7 @@ cat /tmp/hosts123
 ### MapReduce
 Pi Estimator
 
-```
+```bash
 yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/hadoop-examples.jar pi 10 1000
 ```
 
@@ -395,7 +395,7 @@ Note:
 For Hive on MapReduce, add "set hive.execution.engine=mr;" to the query.
 For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 
-```
+```bash
 # Replace $HIVESERVER2 with the correct hostname that is running the HS2
 HIVESERVER2=
 REALM=`awk '/^ *default_realm/{print $3}' /etc/krb5.conf`
@@ -415,7 +415,7 @@ beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "SELECT * F
 ### HBase
 Create a table and query it.
 
-```
+```bash
 cat <<EOF >/tmp/hbase.$$
 create 'test', 'cf'
 list 'test'
@@ -430,7 +430,7 @@ hbase shell -n /tmp/hbase.$$
 ### Impala
 Query the hive table created earlier.
 
-```
+```bash
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
 IMPALAD=
 IKOPTS="-k"
@@ -443,13 +443,13 @@ impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "SELECT * FROM test;"
 ### Spark
 Pi Estimator
 
-```
+```bash
 MASTER=yarn /opt/cloudera/parcels/CDH/lib/spark/bin/run-example SparkPi 100
 ```
 
 Wordcount
 
-```
+```bash
 echo "this is the end. the only end. my friend." > /tmp/sparkin.$$
 hdfs dfs -put /tmp/sparkin.$$ /tmp/
 
@@ -468,7 +468,7 @@ hdfs dfs -cat /tmp/sparkout.$$/part-\*
 ### Pig
 Query data in a file.
 
-```
+```bash
 hdfs dfs -copyFromLocal /etc/passwd /tmp/test.pig.passwd.$$
 
 cat <<EOF >/tmp/pig.$$
@@ -485,7 +485,7 @@ hdfs dfs -cat /tmp/test.pig.out.$$/part-m-00000
 ### Clean It Up
 Get rid of all the test bits.
 
-```
+```bash
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
