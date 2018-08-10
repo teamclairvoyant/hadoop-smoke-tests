@@ -34,7 +34,7 @@ For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 
 ```
 # Replace $HIVESERVER2 with the correct hostname that is running the HS2
-HIVESERVER2=`hostname`
+HIVESERVER2=
 
 # Create hive table
 beeline -n `whoami` -u "jdbc:hive2://${HIVESERVER2}:10000/" -e "CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS TEXTFILE;"
@@ -69,7 +69,7 @@ Query the hive table created earlier.
 
 ```
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
-IMPALAD=`hostname`
+IMPALAD=
 
 impala-shell -i $IMPALAD -q "invalidate metadata;"
 impala-shell -i $IMPALAD -q "SELECT * FROM test;"
@@ -161,7 +161,7 @@ Create a Kudu table and query it.
 
 ```
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
-IMPALAD=`hostname`
+IMPALAD=
 
 impala-shell -i $IMPALAD -q 'CREATE TABLE kudu_test(id BIGINT, name STRING, PRIMARY KEY(id)) PARTITION BY HASH PARTITIONS 3 STORED AS KUDU;'
 
@@ -242,7 +242,7 @@ For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 
 ```
 # Replace $HIVESERVER2 with the correct hostname that is running the HS2
-HIVESERVER2=`hostname`
+HIVESERVER2=
 REALM=`awk '/^ *default_realm/{print $3}' /etc/krb5.conf`
 BKOPTS=";principal=hive/_HOST@${REALM}"
 BTOPTS=";ssl=true;sslTrustStore=/usr/java/default/jre/lib/security/jssecacerts;trustStorePassword=changeit"
@@ -279,7 +279,7 @@ Query the hive table created earlier.
 
 ```
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
-IMPALAD=`hostname`
+IMPALAD=
 IKOPTS="-k"
 ITOPTS="--ssl --ca_cert=/opt/cloudera/security/x509/ca-chain.cert.pem"
 
@@ -451,7 +451,7 @@ For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 
 ```
 # Replace $HIVESERVER2 with the correct hostname that is running the HS2
-HIVESERVER2=`hostname`
+HIVESERVER2=
 REALM=`awk '/^ *default_realm/{print $3}' /etc/krb5.conf`
 BKOPTS=";principal=hive/_HOST@${REALM}"
 BTOPTS=";ssl=true;sslTrustStore=/usr/java/default/jre/lib/security/jssecacerts;trustStorePassword=changeit"
@@ -486,7 +486,7 @@ Query the hive table created earlier.
 
 ```
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
-IMPALAD=`hostname`
+IMPALAD=
 IKOPTS="-k"
 ITOPTS="--ssl --ca_cert=/opt/cloudera/security/x509/ca-chain.cert.pem"
 
