@@ -1,6 +1,6 @@
-# Cloudera Hadoop Smoke Tests
+# Cloudera Distribution of Apache Hadoop Smoke Tests
 
-These are basic smoke tests to be used to determine basic functionality of the various parts of a Hadoop cluster.  One might use these when setting up a new cluster or after a cluster upgrade.
+These are smoke tests to be used to determine basic functionality of the various parts of a Hadoop cluster.  One might use these when setting up a new cluster or after a cluster upgrade.
 
 TOC
 
@@ -170,25 +170,6 @@ impala-shell -i $IMPALAD -q 'INSERT INTO TABLE kudu_test VALUES (1, "wasim"), (2
 impala-shell -i $IMPALAD -q 'SELECT * FROM kudu_test WHERE id=1;'
 ```
 
-### Kafka
-Create a test topic.  Write to/read from it.
-
-```
-# Replace $ZOOKEEPER and $KAFKA 'localhost' with the correct hostname.
-# Replace the ZOOKEEPER '/kafka' with the correct ZooKeeper root (if you configured one).
-ZOOKEEPER=localhost:2181/kafka
-KAFKA=localhost:9092
-
-kafka-topics --zookeeper ${ZOOKEEPER} --create --topic test --partitions 1 --replication-factor 1
-kafka-topics --zookeeper ${ZOOKEEPER} --list
-
-# Run the consumer and producer in separate windows.
-# Type in text to the producer and watch it appear in the consumer.
-# ^C to quit.
-kafka-console-consumer --zookeeper ${ZOOKEEPER} --new-consumer --topic test
-kafka-console-producer --broker-list ${KAFKA} --topic test
-```
-
 ### Clean It Up
 Get rid of all the test bits.
 
@@ -222,8 +203,6 @@ sudo su - solr -s /bin/bash -c "hdfs dfs -rm -R -skipTrash /solr/test_collection
 rm -rf /tmp/test_config.$$
 
 impala-shell -i $IMPALAD -q 'DROP TABLE kudu_test;'
-
-kafka-topics --zookeeper ${ZOOKEEPER}:2181 --delete --topic test
 ```
 
 ## Secured Cluster
@@ -391,25 +370,6 @@ java -Durl=${STPROTO:-http}://${SOLRSERVER}:${STPORT:-8983}/solr/test_collection
 curl $SKOPTS "${STPROTO:-http}://${SOLRSERVER}:${STPORT:-8983}/solr/test_collection_shard1_replica1/select?q=*%3A*&wt=json&indent=true"
 ```
 
-### Kafka
-Create a test topic.  Write to/read from it.
-
-```
-# Replace $ZOOKEEPER and $KAFKA 'localhost' with the correct hostname.
-# Replace the ZOOKEEPER '/kafka' with the correct ZooKeeper root (if you configured one).
-ZOOKEEPER=localhost:2181/kafka
-KAFKA=localhost:9093
-
-kafka-topics --zookeeper ${ZOOKEEPER} --create --topic test --partitions 1 --replication-factor 1
-kafka-topics --zookeeper ${ZOOKEEPER} --list
-
-# Run the consumer and producer in separate windows.
-# Type in text to the producer and watch it appear in the consumer.
-# ^C to quit.
-kafka-console-consumer --zookeeper ${ZOOKEEPER} --bootstrap-server ${KAFKA} --new-consumer --topic test
-kafka-console-producer --broker-list ${KAFKA} --topic test
-```
-
 ### Clean It Up
 Get rid of all the test bits.
 
@@ -442,8 +402,6 @@ solrctl instancedir --delete test_config
 #kinit solr
 #hdfs dfs -rm -R -skipTrash /solr/test_collection
 rm -rf /tmp/test_config.$$
-
-kafka-topics --zookeeper ${ZOOKEEPER} --delete --topic test
 
 
 kdestroy
@@ -602,25 +560,6 @@ pig /tmp/pig.$$
 hdfs dfs -cat /tmp/test.pig.out.$$/part-m-00000
 ```
 
-### Kafka
-Create a test topic.
-
-```
-# Replace $ZOOKEEPER and $KAFKA 'localhost' with the correct hostname.
-# Replace the ZOOKEEPER '/kafka' with the correct ZooKeeper root (if you configured one).
-ZOOKEEPER=localhost:2181/kafka
-KAFKA=localhost:9093
-
-kafka-topics --zookeeper ${ZOOKEEPER} --create --topic test --partitions 1 --replication-factor 1
-kafka-topics --zookeeper ${ZOOKEEPER} --list
-
-# Run the consumer and producer in separate windows.
-# Type in text to the producer and watch it appear in the consumer.
-# ^C to quit.
-kafka-console-consumer --zookeeper ${ZOOKEEPER} --bootstrap-server ${KAFKA} --new-consumer --topic test
-kafka-console-producer --broker-list ${KAFKA} --topic test
-```
-
 ### Clean It Up
 Get rid of all the test bits.
 
@@ -647,8 +586,6 @@ rm -f /tmp/spark2.$$
 
 hdfs dfs -rm -R /tmp/test.pig.passwd.$$ /tmp/test.pig.out.$$
 rm -f /tmp/pig.$$
-
-kafka-topics --zookeeper ${ZOOKEEPER} --delete --topic test
 
 
 kdestroy
