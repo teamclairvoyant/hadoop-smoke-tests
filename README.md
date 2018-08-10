@@ -7,7 +7,8 @@ cluster or after a cluster upgrade to prove that the services work.
 
 ## Documents
 
-- [Smoke Tests for a Cloudera CDH Cluster](Cloudera-CDH.md)
+- [Smoke Tests for a Cloudera CDH Apache Hadoop Cluster](Cloudera-CDH.md)
+- [Smoke Tests for a Cloudera CDK Apache Kafka Cluster](Cloudera-CDK.md)
 
 ## Guidelines:
 
