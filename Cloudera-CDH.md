@@ -121,7 +121,7 @@ hdfs dfs -cat /tmp/test.pig.out.$$/part-m-00000
 Create a test collection.  Index it and query it.
 
 ```
-SOLRSERVER=solrserverhost
+SOLRSERVER=
 
 solrctl instancedir --generate /tmp/solr.$$
 solrctl instancedir --create test_config /tmp/solr.$$
@@ -305,7 +305,7 @@ hdfs dfs -cat /tmp/test.pig.out.$$/part-m-00000
 Create a test collection.  Index it and query it.
 
 ```
-SOLRSERVER=solrserverhost
+SOLRSERVER=
 SKOPTS="--negotiate -u :"
 STPROTO=https
 STPORT=8985
