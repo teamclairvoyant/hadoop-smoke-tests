@@ -2,7 +2,17 @@
 
 These are smoke tests to be used to determine basic functionality of the various parts of a Cloudera Spark2-on-YARN cluster.  One might use these when setting up a new cluster or after a cluster upgrade.
 
-TOC
+<!-- TOC depthFrom:2 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Non-Secured Cluster](#non-secured-cluster)
+	- [Spark2](#spark2)
+	- [Clean It Up](#clean-it-up)
+- [Secured Cluster](#secured-cluster)
+	- [Preparation](#preparation)
+	- [Spark2](#spark2)
+	- [Clean It Up](#clean-it-up)
+
+<!-- /TOC -->
 
 ## Non-Secured Cluster
 These examples assume a non-secured cluster and use of a non-cluster user (i.e. the user "centos").
