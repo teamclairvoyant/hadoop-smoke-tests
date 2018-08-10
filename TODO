@@ -1,0 +1,17 @@
+Cloudera-Kafka:
+- Add ZooKeeper tests.
+- Determine if Sentry can be used and if so add tests. (https://www.cloudera.com/documentation/kafka/latest/topics/kafka_security.html#using_kafka_with_sentry)
+
+Cloudera-Hadoop:
+- Add Flume tests.
+- Fix Solr tests.
+- Add Accumulo tests.
+- Add Hue tests.
+- Add Oozie tests.
+- Add Sqoop tests.
+- Add YARN tests.
+- Add ZooKeeper tests.
+
+Add Hortonworks-HDP tests.
+Add Hortonworks-HFI tests.
+
