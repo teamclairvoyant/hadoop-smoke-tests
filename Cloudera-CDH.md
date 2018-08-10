@@ -100,30 +100,6 @@ cat /tmp/spark.$$ | spark-shell --master yarn-client
 hdfs dfs -cat /tmp/sparkout.$$/part-\*
 ```
 
-### Spark2
-Pi Estimator
-
-```
-MASTER=yarn /opt/cloudera/parcels/SPARK2/lib/spark2/bin/run-example SparkPi 100
-```
-Wordcount
-
-```
-echo "this is the end. the only end. my friend." > /tmp/sparkin2.$$
-hdfs dfs -put /tmp/sparkin2.$$ /tmp/
-
-cat <<EOF >/tmp/spark2.$$
-val file = sc.textFile("hdfs:///tmp/sparkin2.$$")
-val counts = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
-counts.saveAsTextFile("hdfs:///tmp/sparkout2.$$")
-exit
-EOF
-
-cat /tmp/spark2.$$ | spark2-shell --master yarn-client
-
-hdfs dfs -cat /tmp/sparkout2.$$/part-\*
-```
-
 ### Pig
 Query data in a file.
 
@@ -190,9 +166,6 @@ rm -f /tmp/hbase.$$ /tmp/hbase-rm.$$
 
 hdfs dfs -rm -R /tmp/sparkout.$$ /tmp/sparkin.$$
 rm -f /tmp/spark.$$
-
-hdfs dfs -rm -R /tmp/sparkout2.$$ /tmp/sparkin2.$$
-rm -f /tmp/spark2.$$
 
 hdfs dfs -rm -R /tmp/test.pig.passwd.$$ /tmp/test.pig.out.$$
 rm -f /tmp/pig.$$
@@ -311,30 +284,6 @@ cat /tmp/spark.$$ | spark-shell --master yarn-client
 hdfs dfs -cat /tmp/sparkout.$$/part-\*
 ```
 
-### Spark2
-Pi Estimator
-
-```
-MASTER=yarn /opt/cloudera/parcels/SPARK2/lib/spark2/bin/run-example SparkPi 100
-```
-Wordcount
-
-```
-echo "this is the end. the only end. my friend." > /tmp/sparkin2.$$
-hdfs dfs -put /tmp/sparkin2.$$ /tmp/
-
-cat <<EOF >/tmp/spark2.$$
-val file = sc.textFile("hdfs:///tmp/sparkin2.$$")
-val counts = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
-counts.saveAsTextFile("hdfs:///tmp/sparkout2.$$")
-exit
-EOF
-
-cat /tmp/spark2.$$ | spark2-shell --master yarn-client
-
-hdfs dfs -cat /tmp/sparkout2.$$/part-\*
-```
-
 ### Pig
 Query data in a file.
 
@@ -390,9 +339,6 @@ rm -f /tmp/hbase.$$ /tmp/hbase-rm.$$
 
 hdfs dfs -rm -R /tmp/sparkout.$$ /tmp/sparkin.$$
 rm -f /tmp/spark.$$
-
-hdfs dfs -rm -R /tmp/sparkout2.$$ /tmp/sparkin2.$$
-rm -f /tmp/spark2.$$
 
 hdfs dfs -rm -R /tmp/test.pig.passwd.$$ /tmp/test.pig.out.$$
 rm -f /tmp/pig.$$
@@ -519,30 +465,6 @@ cat /tmp/spark.$$ | spark-shell --master yarn-client
 hdfs dfs -cat /tmp/sparkout.$$/part-\*
 ```
 
-### Spark2
-Pi Estimator
-
-```
-MASTER=yarn /opt/cloudera/parcels/SPARK2/lib/spark2/bin/run-example SparkPi 100
-```
-Wordcount
-
-```
-echo "this is the end. the only end. my friend." > /tmp/sparkin2.$$
-hdfs dfs -put /tmp/sparkin2.$$ /tmp/
-
-cat <<EOF >/tmp/spark2.$$
-val file = sc.textFile("hdfs:///tmp/sparkin2.$$")
-val counts = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
-counts.saveAsTextFile("hdfs:///tmp/sparkout2.$$")
-exit
-EOF
-
-cat /tmp/spark2.$$ | spark2-shell --master yarn-client
-
-hdfs dfs -cat /tmp/sparkout2.$$/part-\*
-```
-
 ### Pig
 Query data in a file.
 
@@ -580,9 +502,6 @@ rm -f /tmp/hbase.$$ /tmp/hbase-rm.$$
 
 hdfs dfs -rm -R /tmp/sparkout.$$ /tmp/sparkin.$$
 rm -f /tmp/spark.$$
-
-hdfs dfs -rm -R /tmp/sparkout2.$$ /tmp/sparkin2.$$
-rm -f /tmp/spark2.$$
 
 hdfs dfs -rm -R /tmp/test.pig.passwd.$$ /tmp/test.pig.out.$$
 rm -f /tmp/pig.$$
