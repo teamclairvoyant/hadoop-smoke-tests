@@ -42,6 +42,26 @@ These are smoke tests to be used to determine basic functionality of the various
 ## Non-Secured Cluster
 These examples assume a non-secured cluster and use of a non-cluster user (i.e. the user "centos").
 
+### ZooKeeper
+Basic ZooKeeper functionality.
+
+```bash
+# Replace $ZOOKEEPER 'localhost' with the correct hostname.
+# Multiple ZooKeepers can be specified with commas: 'host1:2181,host2:2181,host3:2181'
+ZOOKEEPER=localhost:2181
+
+cat <<EOF >/tmp/zk.$$
+create /zk_test my_data
+ls /
+get /zk_test
+set /zk_test junk
+get /zk_test
+quit
+EOF
+
+cat /tmp/zk.$$ | zookeeper-client -server $ZOOKEEPER
+```
+
 ### HDFS
 Basic HDFS functionality.
 
@@ -185,6 +205,13 @@ impala-shell -i $IMPALAD -q 'SELECT * FROM kudu_test WHERE id=1;'
 Get rid of all the test bits.
 
 ```bash
+cat <<EOF >/tmp/zk-rm.$$
+delete /zk_test
+quit
+EOF
+cat /tmp/zk-rm.$$ | zookeeper-client -server $ZOOKEEPER
+rm -f /tmp/zk.$$ /tmp/zk-rm.$$
+
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
@@ -221,6 +248,26 @@ All below commands require Kerberos tickets.
 
 ```bash
 kinit
+```
+
+### ZooKeeper
+Basic ZooKeeper functionality.
+
+```bash
+# Replace $ZOOKEEPER 'localhost' with the correct hostname.
+# Multiple ZooKeepers can be specified with commas: 'host1:2181,host2:2181,host3:2181'
+ZOOKEEPER=localhost:2181
+
+cat <<EOF >/tmp/zk.$$
+create /zk_test my_data
+ls /
+get /zk_test
+set /zk_test junk
+get /zk_test
+quit
+EOF
+
+cat /tmp/zk.$$ | zookeeper-client -server $ZOOKEEPER
 ```
 
 ### HDFS
@@ -358,6 +405,13 @@ curl $SKOPTS "${STPROTO:-http}://${SOLRSERVER}:${STPORT:-8983}/solr/test_collect
 Get rid of all the test bits.
 
 ```bash
+cat <<EOF >/tmp/zk-rm.$$
+delete /zk_test
+quit
+EOF
+cat /tmp/zk-rm.$$ | zookeeper-client -server $ZOOKEEPER
+rm -f /tmp/zk.$$ /tmp/zk-rm.$$
+
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
@@ -404,6 +458,26 @@ All below commands require Kerberos tickets.
 
 ```bash
 kinit
+```
+
+### ZooKeeper
+Basic ZooKeeper functionality.
+
+```bash
+# Replace $ZOOKEEPER 'localhost' with the correct hostname.
+# Multiple ZooKeepers can be specified with commas: 'host1:2181,host2:2181,host3:2181'
+ZOOKEEPER=localhost:2181
+
+cat <<EOF >/tmp/zk.$$
+create /zk_test my_data
+ls /
+get /zk_test
+set /zk_test junk
+get /zk_test
+quit
+EOF
+
+cat /tmp/zk.$$ | zookeeper-client -server $ZOOKEEPER
 ```
 
 ### HDFS
@@ -521,6 +595,13 @@ hdfs dfs -cat /tmp/test.pig.out.$$/part-m-00000
 Get rid of all the test bits.
 
 ```bash
+cat <<EOF >/tmp/zk-rm.$$
+delete /zk_test
+quit
+EOF
+cat /tmp/zk-rm.$$ | zookeeper-client -server $ZOOKEEPER
+rm -f /tmp/zk.$$ /tmp/zk-rm.$$
+
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
