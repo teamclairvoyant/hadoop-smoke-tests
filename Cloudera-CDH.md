@@ -26,16 +26,6 @@ These are smoke tests to be used to determine basic functionality of the various
 	- [Pig](#pig)
 	- [Solr](#solr)
 	- [Clean It Up](#clean-it-up)
-- [Secured Cluster with Sentry](#secured-cluster-with-sentry)
-	- [Preparation](#preparation)
-	- [HDFS](#hdfs)
-	- [MapReduce](#mapreduce)
-	- [Hive](#hive)
-	- [HBase](#hbase)
-	- [Impala](#impala)
-	- [Spark](#spark)
-	- [Pig](#pig)
-	- [Clean It Up](#clean-it-up)
 
 <!-- /TOC -->
 
@@ -94,11 +84,8 @@ HIVESERVER2=
 # Create hive table
 beeline -n `whoami` -u "jdbc:hive2://${HIVESERVER2}:10000/" -e "CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS TEXTFILE;"
 
-# Create HDFS file
-echo "1 justin" >/tmp/hive.$$
-echo "2 michael" >>/tmp/hive.$$
-# You should probably be the hive user here.
-hdfs dfs -put /tmp/hive.$$ /user/hive/warehouse/test/hive
+# Insert data
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "INSERT INTO TABLE test VALUES (1, "justin"), (2, "michael");"
 
 # Query hive table
 beeline -n `whoami` -u "jdbc:hive2://${HIVESERVER2}:10000/" -e "SELECT * FROM test WHERE id=1;"
@@ -305,10 +292,8 @@ BTOPTS=";ssl=true;sslTrustStore=/usr/java/default/jre/lib/security/jssecacerts;t
 # Create hive table
 beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS TEXTFILE;"
 
-# Create HDFS file
-echo "1 justin" >/tmp/hive.$$
-echo "2 michael" >>/tmp/hive.$$
-hdfs dfs -put /tmp/hive.$$ /user/hive/warehouse/test/hive
+# Insert data
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "INSERT INTO TABLE test VALUES (1, "andrew"), (2, "thomas");"
 
 # Query hive table
 beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "SELECT * FROM test WHERE id=1;"
@@ -437,190 +422,6 @@ solrctl instancedir --delete test_config
 #kinit solr
 #hdfs dfs -rm -R -skipTrash /solr/test_collection
 rm -rf /tmp/test_config.$$
-
-
-kdestroy
-```
-
-## Secured Cluster with Sentry
-These examples assume a secured (Kerberized) cluster with TLS and Sentry and use of a non-cluster principal (i.e. the user/principal "centos").
-
-**DRAFT**
-
-### Preparation
-Sentry needs to be configured with roles.
-
-HBase needs to be configured with roles.
-
-Hive needs to have admin groups (AD or LDAP) added to the Hive Metastore Access Control and Proxy User Groups Overrride (in addition to hue and hive).
-
-All below commands require Kerberos tickets.
-
-```bash
-kinit
-```
-
-### ZooKeeper
-Basic ZooKeeper functionality.
-
-```bash
-# Replace $ZOOKEEPER 'localhost' with the correct hostname.
-# Multiple ZooKeepers can be specified with commas: 'host1:2181,host2:2181,host3:2181'
-ZOOKEEPER=localhost:2181
-
-cat <<EOF >/tmp/zk.$$
-create /zk_test my_data
-ls /
-get /zk_test
-set /zk_test junk
-get /zk_test
-quit
-EOF
-
-cat /tmp/zk.$$ | zookeeper-client -server $ZOOKEEPER
-```
-
-### HDFS
-Basic HDFS functionality.
-
-```bash
-hdfs dfs -ls /
-hdfs dfs -put /etc/hosts /tmp/hosts
-hdfs dfs -get /tmp/hosts /tmp/hosts123
-cat /tmp/hosts123
-```
-
-### MapReduce
-Pi Estimator
-
-```bash
-yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/hadoop-examples.jar pi 10 1000
-```
-
-### Hive
-Create an external table and query it.
-
-Note:
-For Hive on MapReduce, add "set hive.execution.engine=mr;" to the query.
-For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
-
-```bash
-# Replace $HIVESERVER2 with the correct hostname that is running the HS2
-HIVESERVER2=
-REALM=`awk '/^ *default_realm/{print $3}' /etc/krb5.conf`
-BKOPTS=";principal=hive/_HOST@${REALM}"
-BTOPTS=";ssl=true;sslTrustStore=/usr/java/default/jre/lib/security/jssecacerts;trustStorePassword=changeit"
-
-# Create hive table
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS TEXTFILE;"
-
-# Insert data
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "INSERT INTO TABLE test VALUES (1, "justin"), (2, "michael");"
-
-# Query hive table
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "SELECT * FROM test WHERE id=1;"
-```
-
-### HBase
-Create a table and query it.
-
-```bash
-cat <<EOF >/tmp/hbase.$$
-create 'test', 'cf'
-list 'test'
-put 'test', 'row1', 'cf:a', 'value1'
-scan 'test'
-exit
-EOF
-
-hbase shell -n /tmp/hbase.$$
-```
-
-### Impala
-Query the hive table created earlier.
-
-```bash
-# Replace $IMPALAD with the correct hostname that's running the Impala Daemon
-IMPALAD=
-IKOPTS="-k"
-ITOPTS="--ssl --ca_cert=/opt/cloudera/security/x509/ca-chain.cert.pem"
-
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "invalidate metadata;"
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "SELECT * FROM test;"
-```
-
-### Spark
-Pi Estimator
-
-```bash
-MASTER=yarn /opt/cloudera/parcels/CDH/lib/spark/bin/run-example SparkPi 100
-```
-
-Wordcount
-
-```bash
-echo "this is the end. the only end. my friend." > /tmp/sparkin.$$
-hdfs dfs -put /tmp/sparkin.$$ /tmp/
-
-cat <<EOF >/tmp/spark.$$
-val file = sc.textFile("hdfs:///tmp/sparkin.$$")
-val counts = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
-counts.saveAsTextFile("hdfs:///tmp/sparkout.$$")
-exit
-EOF
-
-cat /tmp/spark.$$ | spark-shell --master yarn-client
-
-hdfs dfs -cat /tmp/sparkout.$$/part-\*
-```
-
-### Pig
-Query data in a file.
-
-```bash
-hdfs dfs -copyFromLocal /etc/passwd /tmp/test.pig.passwd.$$
-
-cat <<EOF >/tmp/pig.$$
-A = LOAD '/tmp/test.pig.passwd.$$' USING PigStorage(':');
-B = FOREACH A GENERATE \$0 AS id;
-STORE B INTO '/tmp/test.pig.out.$$';
-EOF
-
-pig /tmp/pig.$$
-
-hdfs dfs -cat /tmp/test.pig.out.$$/part-m-00000
-```
-
-### Clean It Up
-Get rid of all the test bits.
-
-```bash
-cat <<EOF >/tmp/zk-rm.$$
-delete /zk_test
-quit
-EOF
-cat /tmp/zk-rm.$$ | zookeeper-client -server $ZOOKEEPER
-rm -f /tmp/zk.$$ /tmp/zk-rm.$$
-
-hdfs dfs -rm /tmp/hosts
-rm -f /tmp/hosts123
-
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "DROP TABLE test;"
-rm -f /tmp/hive.$$
-
-cat <<EOF >/tmp/hbase-rm.$$
-disable 'test'
-drop 'test'
-exit
-EOF
-hbase shell -n /tmp/hbase-rm.$$
-rm -f /tmp/hbase.$$ /tmp/hbase-rm.$$
-
-hdfs dfs -rm -R /tmp/sparkout.$$ /tmp/sparkin.$$
-rm -f /tmp/spark.$$
-
-hdfs dfs -rm -R /tmp/test.pig.passwd.$$ /tmp/test.pig.out.$$
-rm -f /tmp/pig.$$
 
 
 kdestroy
