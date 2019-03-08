@@ -9,6 +9,7 @@ These are smoke tests to be used to determine basic functionality of the various
 	- [MapReduce](#mapreduce)
 	- [Hive](#hive)
 	- [HBase](#hbase)
+	- [Accumulo](#accumulo)
 	- [Impala](#impala)
 	- [Spark](#spark)
 	- [Pig](#pig)
@@ -104,6 +105,21 @@ exit
 EOF
 
 hbase shell -n /tmp/hbase.$$
+```
+
+### Accumulo
+Create a table and query it.
+
+```bash
+cat <<EOF >/tmp/accumulo.$$
+createtable test
+insert row1 cf a value1
+flush -w
+scan
+exit
+EOF
+
+accumulo shell -u root -p secret -f /tmp/accumulo.$$
 ```
 
 ### Impala
@@ -212,6 +228,13 @@ exit
 EOF
 hbase shell -n /tmp/hbase-rm.$$
 rm -f /tmp/hbase.$$ /tmp/hbase-rm.$$
+
+cat <<EOF >/tmp/accumulo-rm.$$
+droptable test -f
+exit
+EOF
+accumulo shell -u root -p secret -f /tmp/accumulo-rm.$$
+rm -f /tmp/accumulo.$$ /tmp/accumulo-rm.$$
 
 hdfs dfs -rm -R /tmp/sparkout.$$ /tmp/sparkin.$$
 rm -f /tmp/spark.$$
