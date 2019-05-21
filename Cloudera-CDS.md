@@ -33,7 +33,7 @@ cat <<EOF >/tmp/spark2.$$
 val file = sc.textFile("hdfs:///tmp/sparkin2.$$")
 val counts = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
 counts.saveAsTextFile("hdfs:///tmp/sparkout2.$$")
-exit
+:quit
 EOF
 
 cat /tmp/spark2.$$ | spark2-shell --master yarn-client
@@ -75,7 +75,7 @@ cat <<EOF >/tmp/spark2.$$
 val file = sc.textFile("hdfs:///tmp/sparkin2.$$")
 val counts = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
 counts.saveAsTextFile("hdfs:///tmp/sparkout2.$$")
-exit
+:quit
 EOF
 
 cat /tmp/spark2.$$ | spark2-shell --master yarn-client
