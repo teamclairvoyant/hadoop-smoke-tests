@@ -83,13 +83,13 @@ For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 HIVESERVER2=
 
 # Create hive table
-beeline -n `whoami` -u "jdbc:hive2://${HIVESERVER2}:10000/" -e "CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS TEXTFILE;"
+beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY " " STORED AS TEXTFILE;'
 
 # Insert data
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "INSERT INTO TABLE test VALUES (1, "justin"), (2, "michael");"
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'INSERT INTO TABLE test VALUES (1, "justin"), (2, "michael");'
 
 # Query hive table
-beeline -n `whoami` -u "jdbc:hive2://${HIVESERVER2}:10000/" -e "SELECT * FROM test WHERE id=1;"
+beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'SELECT * FROM test WHERE id=1;'
 ```
 
 ### HBase
@@ -218,7 +218,7 @@ rm -f /tmp/zk.$$ /tmp/zk-rm.$$
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
-beeline -n `whoami` -u "jdbc:hive2://${HIVESERVER2}:10000/" -e "DROP TABLE test;"
+beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'DROP TABLE test;'
 rm -f /tmp/hive.$$
 
 cat <<EOF >/tmp/hbase-rm.$$
@@ -313,13 +313,13 @@ BKOPTS=";principal=hive/_HOST@${REALM}"
 BTOPTS=";ssl=true;sslTrustStore=/usr/java/default/jre/lib/security/jssecacerts;trustStorePassword=changeit"
 
 # Create hive table
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS TEXTFILE;"
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY " " STORED AS TEXTFILE;'
 
 # Insert data
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "INSERT INTO TABLE test VALUES (1, "andrew"), (2, "thomas");"
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'INSERT INTO TABLE test VALUES (1, "andrew"), (2, "thomas");'
 
 # Query hive table
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "SELECT * FROM test WHERE id=1;"
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'SELECT * FROM test WHERE id=1;'
 ```
 
 ### HBase
@@ -423,7 +423,7 @@ rm -f /tmp/zk.$$ /tmp/zk-rm.$$
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e "DROP TABLE test;"
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'DROP TABLE test;'
 rm -f /tmp/hive.$$
 
 cat <<EOF >/tmp/hbase-rm.$$
