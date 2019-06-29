@@ -26,6 +26,7 @@ These are smoke tests to be used to determine basic functionality of the various
 	- [Spark](#spark)
 	- [Pig](#pig)
 	- [Solr](#solr)
+	- [Kudu](#kudu)
 	- [Clean It Up](#clean-it-up)
 
 <!-- /TOC -->
@@ -409,6 +410,21 @@ java -Durl=${STPROTO:-http}://${SOLRSERVER}:${STPORT:-8983}/solr/test_collection
 curl $SKOPTS "${STPROTO:-http}://${SOLRSERVER}:${STPORT:-8983}/solr/test_collection_shard1_replica1/select?q=*%3A*&wt=json&indent=true"
 ```
 
+### Kudu
+#### Impala
+Create a Kudu table and query it.
+
+```bash
+# Replace $IMPALAD with the correct hostname that's running the Impala Daemon
+IMPALAD=
+
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'CREATE TABLE kudu_test(id BIGINT, name STRING, PRIMARY KEY(id)) PARTITION BY HASH PARTITIONS 3 STORED AS KUDU;'
+
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'INSERT INTO TABLE kudu_test VALUES (1, "wasim"), (2, "ninad"), (3, "mohsin");'
+
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'SELECT * FROM kudu_test WHERE id=1;'
+```
+
 ### Clean It Up
 Get rid of all the test bits.
 
@@ -445,6 +461,8 @@ solrctl instancedir --delete test_config
 #kinit solr
 #hdfs dfs -rm -R -skipTrash /solr/test_collection
 rm -rf /tmp/test_config.$$
+
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'DROP TABLE kudu_test;'
 
 
 kdestroy
