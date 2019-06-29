@@ -14,6 +14,7 @@ These are smoke tests to be used to determine basic functionality of the various
 	- [Spark](#spark)
 	- [Pig](#pig)
 	- [Solr](#solr)
+	- [Oozie](#oozie)
 	- [Kudu](#kudu)
 	- [Clean It Up](#clean-it-up)
 - [Secured Cluster](#secured-cluster)
@@ -26,6 +27,7 @@ These are smoke tests to be used to determine basic functionality of the various
 	- [Spark](#spark)
 	- [Pig](#pig)
 	- [Solr](#solr)
+	- [Oozie](#oozie)
 	- [Clean It Up](#clean-it-up)
 
 <!-- /TOC -->
@@ -187,6 +189,16 @@ solrctl collection --create test_collection -s 1 -c test_config
 cd /opt/cloudera/parcels/CDH/share/doc/solr-doc*/example/exampledocs
 java -Durl=http://${SOLRSERVER}:8983/solr/test_collection/update -jar post.jar *.xml
 curl "http://${SOLRSERVER}:8983/solr/test_collection_shard1_replica1/select?q=*%3A*&wt=json&indent=true"
+```
+
+### Oozie
+Check on the server status.
+
+```bash
+# Replace $OOZIE with the correct hostname that's running the Oozie Server
+OOZIE=
+
+oozie admin -oozie http://${OOZIE}:11000/oozie -status
 ```
 
 ### Kudu
@@ -407,6 +419,16 @@ cd /opt/cloudera/parcels/CDH/share/doc/solr-doc*/example/exampledocs
 # Next line does not work.  Need to get java to use SPNEGO.
 java -Durl=${STPROTO:-http}://${SOLRSERVER}:${STPORT:-8983}/solr/test_collection/update -jar post.jar *.xml
 curl $SKOPTS "${STPROTO:-http}://${SOLRSERVER}:${STPORT:-8983}/solr/test_collection_shard1_replica1/select?q=*%3A*&wt=json&indent=true"
+```
+
+### Oozie
+Check on the server status.
+
+```bash
+# Replace $OOZIE with the correct hostname that's running the Oozie Server
+OOZIE=
+
+oozie admin -oozie http://${OOZIE}:11000/oozie -status
 ```
 
 ### Clean It Up
