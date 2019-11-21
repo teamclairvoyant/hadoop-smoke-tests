@@ -84,13 +84,13 @@ For Hive on Spark, add "set hive.execution.engine=spark;" to the query.
 HIVESERVER2=
 
 # Create hive table
-beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY " " STORED AS TEXTFILE;'
+beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'CREATE TABLE default.test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY " " STORED AS TEXTFILE;'
 
 # Insert data
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'INSERT INTO TABLE test VALUES (1, "justin"), (2, "michael");'
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'INSERT INTO TABLE default.test VALUES (1, "justin"), (2, "michael");'
 
 # Query hive table
-beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'SELECT * FROM test WHERE id=1;'
+beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'SELECT * FROM default.test WHERE id=1;'
 ```
 
 ### HBase
@@ -130,8 +130,8 @@ Query the hive table created earlier.
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
 IMPALAD=
 
-impala-shell -i $IMPALAD -q "INVALIDATE METADATA test;"
-impala-shell -i $IMPALAD -q "SELECT * FROM test;"
+impala-shell -i $IMPALAD -q "INVALIDATE METADATA default.test;"
+impala-shell -i $IMPALAD -q "SELECT * FROM default.test;"
 ```
 
 ### Spark
@@ -198,11 +198,11 @@ Create a Kudu table and query it.
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
 IMPALAD=
 
-impala-shell -i $IMPALAD -q 'CREATE TABLE kudu_test(id BIGINT, name STRING, PRIMARY KEY(id)) PARTITION BY HASH PARTITIONS 3 STORED AS KUDU;'
+impala-shell -i $IMPALAD -q 'CREATE TABLE default.kudu_test(id BIGINT, name STRING, PRIMARY KEY(id)) PARTITION BY HASH PARTITIONS 3 STORED AS KUDU;'
 
-impala-shell -i $IMPALAD -q 'INSERT INTO TABLE kudu_test VALUES (1, "wasim"), (2, "ninad"), (3, "mohsin");'
+impala-shell -i $IMPALAD -q 'INSERT INTO TABLE default.kudu_test VALUES (1, "wasim"), (2, "ninad"), (3, "mohsin");'
 
-impala-shell -i $IMPALAD -q 'SELECT * FROM kudu_test WHERE id=1;'
+impala-shell -i $IMPALAD -q 'SELECT * FROM default.kudu_test WHERE id=1;'
 ```
 
 ### Clean It Up
@@ -219,7 +219,7 @@ rm -f /tmp/zk.$$ /tmp/zk-rm.$$
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
-beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'DROP TABLE test;'
+beeline -n $(whoami) -u "jdbc:hive2://${HIVESERVER2}:10000/" -e 'DROP TABLE default.test;'
 rm -f /tmp/hive.$$
 
 cat <<EOF >/tmp/hbase-rm.$$
@@ -248,7 +248,7 @@ solrctl instancedir --delete test_config
 sudo su - solr -s /bin/bash -c "hdfs dfs -rm -R -skipTrash /solr/test_collection"
 rm -rf /tmp/test_config.$$
 
-impala-shell -i $IMPALAD -q 'DROP TABLE kudu_test;'
+impala-shell -i $IMPALAD -q 'DROP TABLE default.kudu_test;'
 ```
 
 ## Secured Cluster
@@ -314,13 +314,13 @@ BKOPTS=";principal=hive/_HOST@${REALM}"
 BTOPTS=";ssl=true;sslTrustStore=/usr/java/default/jre/lib/security/jssecacerts;trustStorePassword=changeit"
 
 # Create hive table
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'CREATE TABLE test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY " " STORED AS TEXTFILE;'
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'CREATE TABLE default.test(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY " " STORED AS TEXTFILE;'
 
 # Insert data
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'INSERT INTO TABLE test VALUES (1, "andrew"), (2, "thomas");'
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'INSERT INTO TABLE default.test VALUES (1, "andrew"), (2, "thomas");'
 
 # Query hive table
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'SELECT * FROM test WHERE id=1;'
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'SELECT * FROM default.test WHERE id=1;'
 ```
 
 ### HBase
@@ -347,8 +347,8 @@ IMPALAD=
 IKOPTS="-k"
 ITOPTS="--ssl --ca_cert=/opt/cloudera/security/x509/ca-chain.cert.pem"
 
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "INVALIDATE METADATA test;"
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "SELECT * FROM test;"
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "INVALIDATE METADATA default.test;"
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "SELECT * FROM default.test;"
 ```
 
 ### Spark
@@ -418,11 +418,11 @@ Create a Kudu table and query it.
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
 IMPALAD=
 
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'CREATE TABLE kudu_test(id BIGINT, name STRING, PRIMARY KEY(id)) PARTITION BY HASH PARTITIONS 3 STORED AS KUDU;'
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'CREATE TABLE default.kudu_test(id BIGINT, name STRING, PRIMARY KEY(id)) PARTITION BY HASH PARTITIONS 3 STORED AS KUDU;'
 
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'INSERT INTO TABLE kudu_test VALUES (1, "wasim"), (2, "ninad"), (3, "mohsin");'
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'INSERT INTO TABLE default.kudu_test VALUES (1, "wasim"), (2, "ninad"), (3, "mohsin");'
 
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'SELECT * FROM kudu_test WHERE id=1;'
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'SELECT * FROM default.kudu_test WHERE id=1;'
 ```
 
 ### Clean It Up
@@ -439,7 +439,7 @@ rm -f /tmp/zk.$$ /tmp/zk-rm.$$
 hdfs dfs -rm /tmp/hosts
 rm -f /tmp/hosts123
 
-beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'DROP TABLE test;'
+beeline -u "jdbc:hive2://${HIVESERVER2}:10000/${BKOPTS}${BTOPTS}" -e 'DROP TABLE default.test;'
 rm -f /tmp/hive.$$
 
 cat <<EOF >/tmp/hbase-rm.$$
@@ -462,7 +462,7 @@ solrctl instancedir --delete test_config
 #hdfs dfs -rm -R -skipTrash /solr/test_collection
 rm -rf /tmp/test_config.$$
 
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'DROP TABLE kudu_test;'
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q 'DROP TABLE default.kudu_test;'
 
 
 kdestroy
