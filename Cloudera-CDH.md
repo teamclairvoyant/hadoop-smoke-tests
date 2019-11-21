@@ -130,7 +130,7 @@ Query the hive table created earlier.
 # Replace $IMPALAD with the correct hostname that's running the Impala Daemon
 IMPALAD=
 
-impala-shell -i $IMPALAD -q "invalidate metadata;"
+impala-shell -i $IMPALAD -q "INVALIDATE METADATA test;"
 impala-shell -i $IMPALAD -q "SELECT * FROM test;"
 ```
 
@@ -347,7 +347,7 @@ IMPALAD=
 IKOPTS="-k"
 ITOPTS="--ssl --ca_cert=/opt/cloudera/security/x509/ca-chain.cert.pem"
 
-impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "invalidate metadata;"
+impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "INVALIDATE METADATA test;"
 impala-shell -i $IMPALAD $IKOPTS $ITOPTS -q "SELECT * FROM test;"
 ```
 
