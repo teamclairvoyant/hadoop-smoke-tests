@@ -52,7 +52,7 @@ kafka-topics --zookeeper ${ZOOKEEPER}${ZOOKEEPER_TOPIC} --list
 # Run the consumer and producer in separate windows.
 # Type in text to the producer and watch it appear in the consumer.
 # ^C to quit.
-kafka-console-consumer --zookeeper ${ZOOKEEPER}${ZOOKEEPER_TOPIC} --new-consumer --topic test
+kafka-console-consumer --bootstrap-server $KAFKA --topic test
 kafka-console-producer --broker-list $KAFKA --topic test
 ```
 
@@ -67,7 +67,7 @@ EOF
 cat /tmp/zk-rm.$$ | zookeeper-client -server $ZOOKEEPER
 rm -f /tmp/zk.$$ /tmp/zk-rm.$$
 
-kafka-topics --zookeeper $ZOOKEEPER --delete --topic test
+kafka-topics --zookeeper ${ZOOKEEPER}${ZOOKEEPER_TOPIC} --delete --topic test
 ```
 
 ## Secured Cluster
@@ -115,7 +115,7 @@ kafka-topics --zookeeper ${ZOOKEEPER}${ZOOKEEPER_TOPIC} --list
 # Run the consumer and producer in separate windows.
 # Type in text to the producer and watch it appear in the consumer.
 # ^C to quit.
-kafka-console-consumer --zookeeper ${ZOOKEEPER}${ZOOKEEPER_TOPIC} --bootstrap-server $KAFKA --new-consumer --topic test
+kafka-console-consumer --bootstrap-server $KAFKA --topic test
 kafka-console-producer --broker-list $KAFKA --topic test
 ```
 
@@ -130,7 +130,7 @@ EOF
 cat /tmp/zk-rm.$$ | zookeeper-client -server $ZOOKEEPER
 rm -f /tmp/zk.$$ /tmp/zk-rm.$$
 
-kafka-topics --zookeeper $ZOOKEEPER --delete --topic test
+kafka-topics --zookeeper ${ZOOKEEPER}${ZOOKEEPER_TOPIC} --delete --topic test
 
 
 kdestroy
